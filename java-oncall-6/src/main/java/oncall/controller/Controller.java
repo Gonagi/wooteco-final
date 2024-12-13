@@ -48,8 +48,8 @@ public class Controller {
     }
 
     private void redDayProcess(final Month month, final int day, final DayOfWeek dayOfWeek, final TimeTable timeTable) {
-        if (publicHolidayProcess(month, day, dayOfWeek, timeTable)) {
-            return;
+        if (publicHoliday.isPublicHoliday(Date.of(month, day))) {
+            publicHolidayProcess(month, day, dayOfWeek, timeTable);
         }
         holidayProcess(month, day, dayOfWeek, timeTable);
     }
@@ -57,11 +57,35 @@ public class Controller {
     private void weekDayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
                                 final TimeTable timeTable) {
         outputView.printDay(month.getMonth(), day, dayOfWeek.getDayOfWeek(), timeTable.getWeekDaysNickName());
-        String weekDaysNickName = timeTable.getWeekDaysNickName();
-        timeTable.rotationWeekDays();
         if (Month.isLastDay(Date.of(month, day))) {
             return;
         }
+        weekdayChangeProcess(month, day, dayOfWeek, timeTable);
+    }
+
+    private void holidayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
+                                final TimeTable timeTable) {
+        outputView.printDay(month.getMonth(), day, dayOfWeek.getDayOfWeek(), timeTable.getHolidaysNickName());
+        if (Month.isLastDay(Date.of(month, day))) {
+            return;
+        }
+        holidayChangeProcess(month, day, dayOfWeek, timeTable);
+    }
+
+    private void publicHolidayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
+                                      final TimeTable timeTable) {
+        outputView.printPublicHoliday(month.getMonth(), day, dayOfWeek.getDayOfWeek(),
+                timeTable.getHolidaysNickName());
+        if (Month.isLastDay(Date.of(month, day))) {
+            return;
+        }
+        holidayChangeProcess(month, day, dayOfWeek, timeTable);
+    }
+
+    private void weekdayChangeProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
+                                      final TimeTable timeTable) {
+        String weekDaysNickName = timeTable.getWeekDaysNickName();
+        timeTable.rotationWeekDays();
         DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
         if (isRedDay(nextDay, month, day)) {
             timeTable.changeHolidays(weekDaysNickName);
@@ -69,42 +93,17 @@ public class Controller {
             timeTable.changeWeekDays(weekDaysNickName);
         }
     }
-    
-    private void holidayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
-                                final TimeTable timeTable) {
-        outputView.printDay(month.getMonth(), day, dayOfWeek.getDayOfWeek(), timeTable.getHolidaysNickName());
+
+    private void holidayChangeProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
+                                      final TimeTable timeTable) {
         String holidaysNickName = timeTable.getHolidaysNickName();
         timeTable.rotationHolidays();
-        if (Month.isLastDay(Date.of(month, day))) {
-            return;
-        }
         DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
         if (isRedDay(nextDay, month, day)) {
             timeTable.changeHolidays(holidaysNickName);
         } else {
             timeTable.changeWeekDays(holidaysNickName);
         }
-    }
-
-    private boolean publicHolidayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
-                                         final TimeTable timeTable) {
-        if (publicHoliday.isPublicHoliday(Date.of(month, day))) {
-            outputView.printPublicHoliday(month.getMonth(), day, dayOfWeek.getDayOfWeek(),
-                    timeTable.getHolidaysNickName());
-            String holidaysNickName = timeTable.getHolidaysNickName();
-            timeTable.rotationHolidays();
-            if (Month.isLastDay(Date.of(month, day))) {
-                return true;
-            }
-            DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
-            if (isRedDay(nextDay, month, day)) {
-                timeTable.changeHolidays(holidaysNickName);
-            } else {
-                timeTable.changeWeekDays(holidaysNickName);
-            }
-            return true;
-        }
-        return false;
     }
 
     private boolean isRedDay(final DayOfWeek nextDay, final Month month, final int day) {

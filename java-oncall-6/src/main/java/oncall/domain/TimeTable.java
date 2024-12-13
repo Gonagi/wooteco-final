@@ -25,6 +25,16 @@ public class TimeTable {
         return new TimeTable(inputWeekDays, inputHolidays);
     }
 
+    private static void checkSize(final List<String> weekDays, final List<String> holidays) {
+        Set<String> allNickNames = new HashSet<>();
+        allNickNames.addAll(weekDays);
+        allNickNames.addAll(holidays);
+
+        if (allNickNames.size() < 5 || allNickNames.size() > 35) {
+            throw new IllegalArgumentException(INVALID_INPUT_VALUE.getErrorMessage());
+        }
+    }
+
     public void rotationWeekDays() {
         String name = weekDays.poll();
         weekDays.add(name);
@@ -41,7 +51,6 @@ public class TimeTable {
         }
     }
 
-
     public void changeHolidays(final String nickName) {
         if (Objects.equals(nickName, holidays.peek())) {
             rotationHolidays();
@@ -56,15 +65,5 @@ public class TimeTable {
 
     public String getHolidaysNickName() {
         return holidays.peek();
-    }
-
-    private static void checkSize(final List<String> weekDays, final List<String> holidays) {
-        Set<String> allNickNames = new HashSet<>();
-        allNickNames.addAll(weekDays);
-        allNickNames.addAll(holidays);
-
-        if (allNickNames.size() < 5 || allNickNames.size() > 35) {
-            throw new IllegalArgumentException(INVALID_INPUT_VALUE.getErrorMessage());
-        }
     }
 }
