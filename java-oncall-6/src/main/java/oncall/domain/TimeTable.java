@@ -22,7 +22,16 @@ public class TimeTable {
         checkSize(weekDays, holidays);
         Queue<String> inputWeekDays = new LinkedList<>(weekDays);
         Queue<String> inputHolidays = new LinkedList<>(holidays);
+
+        validateBothSize(inputWeekDays, inputHolidays);
+
         return new TimeTable(inputWeekDays, inputHolidays);
+    }
+
+    private static void validateBothSize(final Queue<String> inputWeekDays, final Queue<String> inputHolidays) {
+        if (!inputWeekDays.containsAll(inputHolidays)) {
+            throw new IllegalArgumentException(INVALID_INPUT_VALUE.getErrorMessage());
+        }
     }
 
     private static void checkSize(final List<String> weekDays, final List<String> holidays) {

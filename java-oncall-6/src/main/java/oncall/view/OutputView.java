@@ -12,6 +12,5 @@ public class OutputView {
     public void printPublicHoliday(final int month, final int day,
                                    final String dayOfWeekDay, final String nickName) {
         System.out.printf(MONTH_DAY_DAY_OF_PUBLIC_HOLIDAY.getMessage(), month, day, dayOfWeekDay, nickName);
-
     }
 }
