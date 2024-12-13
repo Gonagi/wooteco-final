@@ -74,8 +74,12 @@ public class Controller {
 
     private void publicHolidayProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
                                       final TimeTable timeTable) {
-        outputView.printPublicHoliday(month.getMonth(), day, dayOfWeek.getDayOfWeek(),
-                timeTable.getHolidaysNickName());
+        if (dayOfWeek.isHoliday()) {
+            outputView.printDay(month.getMonth(), day, dayOfWeek.getDayOfWeek(), timeTable.getHolidaysNickName());
+        } else {
+            outputView.printPublicHoliday(month.getMonth(), day, dayOfWeek.getDayOfWeek(),
+                    timeTable.getHolidaysNickName());
+        }
         if (Month.isLastDay(Date.of(month, day))) {
             return;
         }
