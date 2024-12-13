@@ -3,6 +3,7 @@ package oncall.domain;
 import static oncall.constants.Constants.COMMA;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public enum Day {
     MONDAY("월", false),
@@ -32,7 +33,7 @@ public enum Day {
     }
 
     private boolean matchingDay(final String day) {
-        return this.dayOfWeek == day;
+        return Objects.equals(getDayOfWeek(), day);
     }
 
     public String getDayOfWeek() {
