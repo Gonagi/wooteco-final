@@ -43,7 +43,7 @@ public class Controller {
                 outputView.printPublicHoliday(month.getMonth(), d, day.getDayOfWeek(), timeTable.getHolidaysNickName());
                 String holidaysNickName = timeTable.getHolidaysNickName();
                 timeTable.rotationHolidays();
-                if (checkLastDay(month, d)) {
+                if (Month.isLastDay(Date.of(month, d))) {
                     return;
                 }
                 if (isRedDay(nextDay, month, d)) {
@@ -55,7 +55,7 @@ public class Controller {
                 outputView.printDay(month.getMonth(), d, day.getDayOfWeek(), timeTable.getHolidaysNickName());
                 String holidaysNickName = timeTable.getHolidaysNickName();
                 timeTable.rotationHolidays();
-                if (checkLastDay(month, d)) {
+                if (Month.isLastDay(Date.of(month, d))) {
                     return;
                 }
                 if (isRedDay(nextDay, month, d)) {
@@ -67,7 +67,7 @@ public class Controller {
                 outputView.printDay(month.getMonth(), d, day.getDayOfWeek(), timeTable.getWeekDaysNickName());
                 String weekDaysNickName = timeTable.getWeekDaysNickName();
                 timeTable.rotationWeekDays();
-                if (checkLastDay(month, d)) {
+                if (Month.isLastDay(Date.of(month, d))) {
                     return;
                 }
                 if (isRedDay(nextDay, month, d)) {
@@ -79,23 +79,6 @@ public class Controller {
 
             day = nextDay;
         }
-    }
-
-    private static boolean checkLastDay(final Month month, final int d) {
-        if (month.getMonth() == 2 && d == 28) {
-            return true;
-        }
-
-        if ((month.getMonth() == 1 || month.getMonth() == 3 || month.getMonth() == 5 || month.getMonth() == 7
-                || month.getMonth() == 8 || month.getMonth() == 10 || month.getMonth() == 12)
-                && d == 31) {
-            return true;
-        }
-        if ((month.getMonth() == 4 || month.getMonth() == 6 || month.getMonth() == 9 || month.getMonth() == 11)
-                && d == 30) {
-            return true;
-        }
-        return false;
     }
 
     private boolean isRedDay(final Day nextDay, final Month month, final int d) {

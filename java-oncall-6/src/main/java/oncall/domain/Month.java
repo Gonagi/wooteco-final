@@ -37,13 +37,12 @@ public enum Month {
                 .orElse(NOTHING);
     }
 
-    public static boolean matchingPublicHolidays(final int month, final int day) {
-        if ((month == 1 && day == 1) || (month == 3 && day == 1) || (month == 5 && day == 5) || (month == 6 && day == 6)
-                || (month == 8 && day == 15) || (month == 10 && day == 3) || (month == 10 && day == 9) || (month == 12
-                && day == 25)) {
-            return true;
-        }
-        return false;
+    public static boolean isLastDay(final Date date) {
+        int month = date.getMonth();
+        int day = date.getDay();
+
+        return Arrays.stream(Month.values())
+                .anyMatch(m -> m.getMonth() == month && m.getDay() == day);
     }
 
     private boolean matchingMonth(final int month) {
