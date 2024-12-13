@@ -2,10 +2,9 @@ package oncall.controller;
 
 import static oncall.utils.ExceptionRetryHandler.retryOnException;
 
-import java.util.ArrayList;
 import java.util.List;
 import oncall.domain.Date;
-import oncall.domain.Day;
+import oncall.domain.DayOfWeek;
 import oncall.domain.Month;
 import oncall.domain.PublicHoliday;
 import oncall.domain.TimeTable;
@@ -26,7 +25,7 @@ public class Controller {
     public void run() {
         String inputMonthDayOfWeek = retryOnException(inputView::inputMonthAndDayOfWeek);
         Month month = Month.from(inputMonthDayOfWeek);
-        Day day = Day.from(inputMonthDayOfWeek);
+        DayOfWeek dayOfWeek = DayOfWeek.from(inputMonthDayOfWeek);
 
         TimeTable timeTable = retryOnException(() -> {
             List<String> weekDayNickNames = inputView.inputWeekDayNickNames();
@@ -34,13 +33,11 @@ public class Controller {
             return TimeTable.of(weekDayNickNames, holidayNickNames);
         });
 
-        List<Day> dayOfWeek = new ArrayList<>(
-                List.of(Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY, Day.FRIDAY, Day.SATURDAY, Day.SUNDAY));
-
         for (int d = 1; d <= month.getDay(); d++) {
-            Day nextDay = getNextDay(dayOfWeek, day);
+            DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
             if (publicHoliday.isPublicHoliday(Date.of(month, d))) {
-                outputView.printPublicHoliday(month.getMonth(), d, day.getDayOfWeek(), timeTable.getHolidaysNickName());
+                outputView.printPublicHoliday(month.getMonth(), d, dayOfWeek.getDayOfWeek(),
+                        timeTable.getHolidaysNickName());
                 String holidaysNickName = timeTable.getHolidaysNickName();
                 timeTable.rotationHolidays();
                 if (Month.isLastDay(Date.of(month, d))) {
@@ -51,8 +48,8 @@ public class Controller {
                 } else {
                     timeTable.changeWeekDays(holidaysNickName);
                 }
-            } else if (day.isHoliday()) {
-                outputView.printDay(month.getMonth(), d, day.getDayOfWeek(), timeTable.getHolidaysNickName());
+            } else if (dayOfWeek.isHoliday()) {
+                outputView.printDay(month.getMonth(), d, dayOfWeek.getDayOfWeek(), timeTable.getHolidaysNickName());
                 String holidaysNickName = timeTable.getHolidaysNickName();
                 timeTable.rotationHolidays();
                 if (Month.isLastDay(Date.of(month, d))) {
@@ -64,7 +61,7 @@ public class Controller {
                     timeTable.changeWeekDays(holidaysNickName);
                 }
             } else {
-                outputView.printDay(month.getMonth(), d, day.getDayOfWeek(), timeTable.getWeekDaysNickName());
+                outputView.printDay(month.getMonth(), d, dayOfWeek.getDayOfWeek(), timeTable.getWeekDaysNickName());
                 String weekDaysNickName = timeTable.getWeekDaysNickName();
                 timeTable.rotationWeekDays();
                 if (Month.isLastDay(Date.of(month, d))) {
@@ -77,20 +74,11 @@ public class Controller {
                 }
             }
 
-            day = nextDay;
+            dayOfWeek = nextDay;
         }
     }
 
-    private boolean isRedDay(final Day nextDay, final Month month, final int d) {
+    private boolean isRedDay(final DayOfWeek nextDay, final Month month, final int d) {
         return nextDay.isHoliday() || publicHoliday.isPublicHoliday(Date.of(month, d + 1));
-    }
-
-    private Day getNextDay(final List<Day> dayOfWeek, Day day) {
-        if (dayOfWeek.indexOf(day) + 1 == 7) {
-            day = Day.MONDAY;
-        } else {
-            day = dayOfWeek.get(dayOfWeek.indexOf(day) + 1);
-        }
-        return day;
     }
 }
