@@ -10,7 +10,7 @@ public enum Day {
     TUESDAY("화", false),
     WEDNESDAY("수", false),
     THURSDAY("목", false),
-    FRIDAY("금", true),
+    FRIDAY("금", false),
     SATURDAY("토", true),
     SUNDAY("일", true),
     NOTHING("", false);
@@ -26,6 +26,14 @@ public enum Day {
         String[] split = inputMonthDayOfWeek.split(COMMA);
         String day = split[1];
 
+        return getDay(day);
+    }
+
+    public static Day fromString(final String string) {
+        return getDay(string);
+    }
+
+    private static Day getDay(final String day) {
         return Arrays.stream(values())
                 .filter(d -> d.matchingDay(day))
                 .findFirst()

@@ -2,9 +2,12 @@ package oncall.domain;
 
 import static oncall.constants.Messages.INVALID_INPUT_VALUE;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
+import java.util.Set;
 
 public class TimeTable {
     private final Queue<String> weekDays;
@@ -21,21 +24,46 @@ public class TimeTable {
         Queue<String> inputHolidays = new LinkedList<>(holidays);
         return new TimeTable(inputWeekDays, inputHolidays);
     }
-    
+
+    public void rotationWeekDays() {
+        String name = weekDays.poll();
+        weekDays.add(name);
+    }
+
+    public void rotationHolidays() {
+        String name = holidays.poll();
+        holidays.add(name);
+    }
+
+    public void changeWeekDays(final String nickName) {
+        if (Objects.equals(nickName, weekDays.peek())) {
+            rotationWeekDays();
+        }
+    }
+
+
+    public void changeHolidays(final String nickName) {
+        if (Objects.equals(nickName, holidays.peek())) {
+            rotationHolidays();
+        } else {
+
+        }
+    }
+
     public String getWeekDaysNickName() {
-        String nickName = weekDays.poll();
-        weekDays.add(nickName);
-        return nickName;
+        return weekDays.peek();
     }
 
     public String getHolidaysNickName() {
-        String nickName = holidays.poll();
-        holidays.add(nickName);
-        return nickName;
+        return holidays.peek();
     }
 
     private static void checkSize(final List<String> weekDays, final List<String> holidays) {
-        if (weekDays.size() + holidays.size() < 5 || weekDays.size() + holidays.size() > 35) {
+        Set<String> allNickNames = new HashSet<>();
+        allNickNames.addAll(weekDays);
+        allNickNames.addAll(holidays);
+
+        if (allNickNames.size() < 5 || allNickNames.size() > 35) {
             throw new IllegalArgumentException(INVALID_INPUT_VALUE.getErrorMessage());
         }
     }
