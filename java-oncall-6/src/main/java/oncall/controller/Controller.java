@@ -4,8 +4,10 @@ import static oncall.utils.ExceptionRetryHandler.retryOnException;
 
 import java.util.ArrayList;
 import java.util.List;
+import oncall.domain.Date;
 import oncall.domain.Day;
 import oncall.domain.Month;
+import oncall.domain.PublicHoliday;
 import oncall.domain.TimeTable;
 import oncall.view.InputView;
 import oncall.view.OutputView;
@@ -13,10 +15,12 @@ import oncall.view.OutputView;
 public class Controller {
     private final InputView inputView;
     private final OutputView outputView;
+    private final PublicHoliday publicHoliday;
 
-    public Controller(final InputView inputView, final OutputView outputView) {
+    public Controller(final InputView inputView, final OutputView outputView, final PublicHoliday publicHoliday) {
         this.inputView = inputView;
         this.outputView = outputView;
+        this.publicHoliday = publicHoliday;
     }
 
     public void run() {
@@ -35,7 +39,7 @@ public class Controller {
 
         for (int d = 1; d <= month.getDay(); d++) {
             Day nextDay = getNextDay(dayOfWeek, day);
-            if (Month.matchingPublicHolidays(month.getMonth(), d)) {
+            if (publicHoliday.isPublicHoliday(Date.of(month, d))) {
                 outputView.printPublicHoliday(month.getMonth(), d, day.getDayOfWeek(), timeTable.getHolidaysNickName());
                 String holidaysNickName = timeTable.getHolidaysNickName();
                 timeTable.rotationHolidays();
@@ -94,11 +98,11 @@ public class Controller {
         return false;
     }
 
-    private static boolean isRedDay(final Day nextDay, final Month month, final int d) {
-        return nextDay.isHoliday() || Month.matchingPublicHolidays(month.getMonth(), d + 1);
+    private boolean isRedDay(final Day nextDay, final Month month, final int d) {
+        return nextDay.isHoliday() || publicHoliday.isPublicHoliday(Date.of(month, d + 1));
     }
 
-    private static Day getNextDay(final List<Day> dayOfWeek, Day day) {
+    private Day getNextDay(final List<Day> dayOfWeek, Day day) {
         if (dayOfWeek.indexOf(day) + 1 == 7) {
             day = Day.MONDAY;
         } else {
