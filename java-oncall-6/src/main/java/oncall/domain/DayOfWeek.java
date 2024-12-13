@@ -27,10 +27,10 @@ public enum DayOfWeek {
         String[] split = inputMonthDayOfWeek.split(COMMA);
         String day = split[1];
 
-        return getDay(day);
+        return getDayOfWeek(day);
     }
 
-    private static DayOfWeek getDay(final String day) {
+    private static DayOfWeek getDayOfWeek(final String day) {
         return Arrays.stream(values())
                 .filter(d -> d.matchingDay(day))
                 .findFirst()
