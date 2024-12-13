@@ -1,5 +1,7 @@
 package oncall.domain;
 
+import static oncall.constants.Constants.COMMA;
+
 import java.util.Arrays;
 
 public enum Day {
@@ -19,7 +21,10 @@ public enum Day {
         this.isHoliday = isHoliday;
     }
 
-    public static Day from(final String day) {
+    public static Day from(final String inputMonthDayOfWeek) {
+        String[] split = inputMonthDayOfWeek.split(COMMA);
+        String day = split[1];
+
         return Arrays.stream(values())
                 .filter(d -> d.matchingDay(day))
                 .findFirst()

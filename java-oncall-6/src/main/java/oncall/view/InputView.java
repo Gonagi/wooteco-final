@@ -1,10 +1,10 @@
 package oncall.view;
 
+import static oncall.constants.Constants.COMMA;
 import static oncall.constants.Messages.INPUT_HOLIDAY_NICKNAMES;
 import static oncall.constants.Messages.INPUT_MONTH_DAY_OF_WEEK;
 import static oncall.constants.Messages.INPUT_WEEKDAY_NICKNAMES;
 import static oncall.constants.Messages.INVALID_INPUT_VALUE;
-import static oncall.utils.ExceptionRetryHandler.retryOnException;
 
 import camp.nextstep.edu.missionutils.Console;
 import java.util.Arrays;
@@ -18,7 +18,6 @@ public class InputView {
     private static final String MONTH_DAY_OF_WEEK_REGEX = "^(\\d+,{1}[월화수목금토일]{1}){1}";
     private static final String NICKNAMES_REGEX = "([ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+,)*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+";
 
-    private static final String COMMA = ",";
 
     public String inputMonthAndDayOfWeek() {
         System.out.print(INPUT_MONTH_DAY_OF_WEEK.getMessage());

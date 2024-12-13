@@ -1,9 +1,8 @@
 package oncall.domain;
 
-import static oncall.constants.constants.COMMA;
+import static oncall.constants.Constants.COMMA;
 
 import java.util.Arrays;
-import javax.swing.ComponentInputMap;
 
 public enum Month {
     JANUARY(1, 31),
@@ -38,16 +37,21 @@ public enum Month {
                 .orElse(NOTHING);
     }
 
-    public static boolean matchingStatutoryHolidays(final int month, final int day) {
+    public static boolean matchingPublicHolidays(final int month, final int day) {
         if ((month == 1 && day == 1) || (month == 3 && day == 1) || (month == 5 && day == 5) || (month == 6 && day == 6)
                 || (month == 8 && day == 15) || (month == 10 && day == 3) || (month == 10 && day == 9) || (month == 12
-                && day == 25))
+                && day == 25)) {
             return true;
+        }
         return false;
     }
 
     private boolean matchingMonth(final int month) {
         return this.month == month;
+    }
+
+    public int getMonth() {
+        return month;
     }
 
     public int getDay() {
