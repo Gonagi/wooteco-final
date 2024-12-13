@@ -6,6 +6,7 @@ public enum Messages {
     INPUT_WEEKDAY_NICKNAMES("평일 비상 근무 순번대로 사원 닉네임을 입력하세요> "),
     INPUT_HOLIDAY_NICKNAMES("휴일 비상 근무 순번대로 사원 닉네임을 입력하세요> "),
     MONTH_DAY_DAY_OF_WEEK_NICKNAME("%d월 %d일 %s %s\n"),
+    MONTH_DAY_DAY_OF_PUBLIC_HOLIDAY("%d월 %d일 %s(휴일) %s\n"),
 
     // error
     INVALID_INPUT_VALUE("유효하지 않은 입력 값입니다. 다시 입력해 주세요.");
