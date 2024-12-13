@@ -84,26 +84,25 @@ public class Controller {
 
     private void weekdayChangeProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
                                       final TimeTable timeTable) {
-        String weekDaysNickName = timeTable.getWeekDaysNickName();
-        timeTable.rotationWeekDays();
+        String weekDaysNickName = timeTable.rotationWeekDays();
         DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
         if (isRedDay(nextDay, month, day)) {
             timeTable.changeHolidays(weekDaysNickName);
-        } else {
-            timeTable.changeWeekDays(weekDaysNickName);
+            return;
         }
+        timeTable.changeWeekDays(weekDaysNickName);
+
     }
 
     private void holidayChangeProcess(final Month month, final int day, final DayOfWeek dayOfWeek,
                                       final TimeTable timeTable) {
-        String holidaysNickName = timeTable.getHolidaysNickName();
-        timeTable.rotationHolidays();
+        String holidaysNickName = timeTable.rotationHolidays();
         DayOfWeek nextDay = DayOfWeek.getNextDayOfWeek(dayOfWeek);
         if (isRedDay(nextDay, month, day)) {
             timeTable.changeHolidays(holidaysNickName);
-        } else {
-            timeTable.changeWeekDays(holidaysNickName);
+            return;
         }
+        timeTable.changeWeekDays(holidaysNickName);
     }
 
     private boolean isRedDay(final DayOfWeek nextDay, final Month month, final int day) {

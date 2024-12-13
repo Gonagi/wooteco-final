@@ -35,14 +35,16 @@ public class TimeTable {
         }
     }
 
-    public void rotationWeekDays() {
+    public String rotationWeekDays() {
         String name = weekDays.poll();
         weekDays.add(name);
+        return name;
     }
 
-    public void rotationHolidays() {
+    public String rotationHolidays() {
         String name = holidays.poll();
         holidays.add(name);
+        return name;
     }
 
     public void changeWeekDays(final String nickName) {
@@ -54,8 +56,6 @@ public class TimeTable {
     public void changeHolidays(final String nickName) {
         if (Objects.equals(nickName, holidays.peek())) {
             rotationHolidays();
-        } else {
-
         }
     }
 
